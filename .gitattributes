@@ -1,0 +1,55 @@
+# --------------------------
+# Normalize line endings
+# --------------------------
+# Force all text files to use LF in the repo
+* text=auto eol=lf
+
+# Keep Windows-friendly endings in specific files (if needed)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# --------------------------
+# Treat common file types as text
+# --------------------------
+*.ts     text diff=typescript
+*.js     text diff=javascript
+*.json   text
+*.html   text diff=html
+*.scss   text diff=css
+*.css    text diff=css
+*.md     text diff=markdown
+*.yaml   text
+*.yml    text
+*.sql    text
+*.py     text diff=python
+*.sh     text eol=lf
+
+# --------------------------
+# Treat binaries properly
+# --------------------------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tgz binary
+*.gz  binary
+*.db  binary
+*.sqlite binary
+*.p12 binary
+*.keystore binary
+
+# --------------------------
+# Improve diffs for Markdown, SQL, JSON
+# --------------------------
+[diff "markdown"]
+  xfuncname = "^(#{1,6})[[:space:]]"
+
+[diff "sql"]
+  xfuncname = "^(CREATE|ALTER|DROP)[[:space:]]+(TABLE|VIEW|FUNCTION|PROCEDURE)[[:space:]]+.*"
+
+[diff "json"]
+  xfuncname = "^[[:space:]]*\"[^\"]+\"[[:space:]]*:"
