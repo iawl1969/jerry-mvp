@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Jerry API
+  version: 0.1.0
+servers:
+  - url: https://api.jerry.health
+paths:
+  /v1/people:
+    post:
+      summary: Create a person profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /v1/people/{personId}:
+    get:
+      summary: Get person profile (auth required)
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Person' }
+  /v1/people/{personId}/medications:
+    post:
+      summary: Add medication
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MedicationCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Medication' }
+  /v1/emergency:
+    get:
+      summary: Emergency responder view (tokenized)
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Minimal ICE payload
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmergencyProfile' }
+        '401': { description: Invalid or expired token }
+components:
+  schemas:
+    PersonCreate:
+      type: object
+      required: [full_name]
+      properties:
+        full_name: { type: string }
+        dob: { type: string, format: date }
+    Person:
+      allOf:
+        - $ref: '#/components/schemas/PersonCreate'
+        - type: object
+          properties:
+            person_id: { type: string }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+    MedicationCreate:
+      type: object
+      required: [generic_name]
+      properties:
+        generic_name: { type: string }
+        brand_name: { type: string }
+        strength: { type: string }
+        route: { type: string }
+        schedule: { type: string }
+    Medication:
+      allOf:
+        - $ref: '#/components/schemas/MedicationCreate'
+        - type: object
+          properties:
+            medication_id: { type: string }
+            person_id: { type: string }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+    EmergencyProfile:
+      type: object
+      required: [person_id, allergies, medications, contacts, generated_at]
+      properties:
+        person_id: { type: string }
+        full_name: { type: string }
+        dob: { type: string, format: date }
+        allergies:
+          type: array
+          items:
+            type: object
+            required: [substance_name, severity]
+            properties:
+              substance_name: { type: string }
+              reaction: { type: string }
+              severity: { type: string }
+        medications:
+          type: array
+          items:
+            type: object
+            required: [generic_name, strength, schedule]
+            properties:
+              generic_name: { type: string }
+              brand_name: { type: string }
+              strength: { type: string }
+              route: { type: string }
+              last_taken_at: { type: string, format: date-time }
+        contacts:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              relation: { type: string }
+              phone: { type: string }
+        code_status: { type: string }
+        directive_url: { type: string, format: uri }
+        generated_at: { type: string, format: date-time }
