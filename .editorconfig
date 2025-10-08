@@ -1,0 +1,64 @@
+# EditorConfig helps developers maintain consistent coding styles
+# https://editorconfig.org
+
+root = true
+
+# --------------------------
+# Default for all files
+# --------------------------
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# --------------------------
+# Windows-specific scripts
+# --------------------------
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+indent_style = tab
+
+# --------------------------
+# TypeScript / JavaScript
+# --------------------------
+[*.{ts,tsx,js,jsx}]
+quote_type = single
+indent_size = 2
+max_line_length = 120
+
+# --------------------------
+# JSON / YAML
+# --------------------------
+[*.{json,yml,yaml}]
+indent_size = 2
+insert_final_newline = true
+
+# --------------------------
+# HTML / CSS / SCSS
+# --------------------------
+[*.{html,css,scss}]
+indent_size = 2
+
+# --------------------------
+# SQL
+# --------------------------
+[*.sql]
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# --------------------------
+# Markdown
+# --------------------------
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# --------------------------
+# Python (if used)
+# --------------------------
+[*.py]
+indent_size = 4
